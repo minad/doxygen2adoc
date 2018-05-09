@@ -498,14 +498,17 @@
     </xsl:template>
 
     <xsl:template name="source-file-link">
+        <!--
         <xsl:text>Jump to link:src/</xsl:text>
         <xsl:value-of select="location/@file"/>
         <xsl:text>.html#line-</xsl:text>
         <xsl:value-of select="location/@line"/>
         <xsl:text>[source file,window="browse-source"]&#10;&#10;</xsl:text>
+        -->
     </xsl:template>
 
     <xsl:template name="source-link">
+        <!--
         <xsl:text>&#10;&#10;</xsl:text>
         <xsl:text>[.right.small]#Jump to </xsl:text>
         <xsl:choose>
@@ -530,6 +533,7 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>#&#10;</xsl:text>
+        -->
     </xsl:template>
 
     <!-- Debugging -->

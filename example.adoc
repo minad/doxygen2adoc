@@ -15,8 +15,6 @@
 [[codedoc-example-8h]]
 == example/example.h
 
-Jump to link:src/example/example.h.html#line-[source file,window="browse-source"]
-
 
 
 
@@ -49,9 +47,6 @@ Jump to link:src/example/example.h.html#line-[source file,window="browse-source"
 
 [[codedoc-example-8h-1afa99ec4acc4ecb2dc3c2d05da15d0e3f]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-51[definition,window="browse-source"]#
 `*#define* MAX(a, b)`
 
 
@@ -75,9 +70,6 @@ Details.
 
 [[codedoc-example-8h-1ae1e6edbbc26d6fbc71a90190d0266018]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-52[definition,window="browse-source"]#
 `*typedef* *unsigned* *int* UINT32`
 
 
@@ -101,9 +93,6 @@ Details.
 
 [[codedoc-example-8h-1ad65a8842cc674e3ddf69355898c0ecbf]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-53[definition,window="browse-source"]#
 `*int* errno`
 
 
@@ -129,9 +118,6 @@ Not thread safe!
 
 [[codedoc-example-8h-1a2c4414339f388561554c2deab11a1a07]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-54[definition,window="browse-source"]#
 `*int* open(*const* *char*{empty}pass:[*], *int*)`
 
 
@@ -158,9 +144,6 @@ Opening flags.
 
 [[codedoc-example-8h-1ae152484c890a24e4d9b4980e7b965be0]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-55[definition,window="browse-source"]#
 `*int* close(*int*)`
 
 
@@ -185,9 +168,6 @@ The descriptor to close.
 
 [[codedoc-example-8h-1af2a3ea719b83f672637febdd87c36c36]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-56[definition,window="browse-source"]#
 `*size_t* write(*int*, *const* *char*{empty}pass:[*], *size_t*)`
 
 
@@ -216,9 +196,6 @@ The number of bytes to write.
 
 [[codedoc-example-8h-1a9c7b76d5266903891c803132d51ccb90]]
 ====
-
-
-[.right.small]#Jump to link:src/example/example.h.html#line-57[definition,window="browse-source"]#
 `*int* read(*int*, *char*{empty}pass:[*], *size_t*)`
 
 
