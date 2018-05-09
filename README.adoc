@@ -1,0 +1,7 @@
+= Doxygen import for Asciidoc
+
+Take a look at the link:example.adoc[example] and the link:Makefile[].
+
+== License
+
+MIT (c) 2018 Daniel Mendler

@@ -1,0 +1,246 @@
+
+= Files
+
+[[codedoc-dir-cfafba98a580ce4b62f8a6fa96d7cbb0]]
+== example/
+
+.Subdirectories
+
+
+.Files
+* <<codedoc-example-8h,example.h>>
+
+
+
+[[codedoc-example-8h]]
+== example/example.h
+
+Jump to link:src/example/example.h.html#line-[source file,window="browse-source"]
+
+
+
+
+
+
+
+
+
+
+
+
+.Macros
+* <<codedoc-example-8h-1afa99ec4acc4ecb2dc3c2d05da15d0e3f,`MAX`>>
+
+.Typedefs
+* <<codedoc-example-8h-1ae1e6edbbc26d6fbc71a90190d0266018,`*unsigned* *int* UINT32`>>
+
+.Variables
+* <<codedoc-example-8h-1ad65a8842cc674e3ddf69355898c0ecbf,`*int* errno`>>
+
+.Functions
+* <<codedoc-example-8h-1a2c4414339f388561554c2deab11a1a07,`*int* open(*const* *char*{empty}pass:[*], *int*)`>>
+* <<codedoc-example-8h-1ae152484c890a24e4d9b4980e7b965be0,`*int* close(*int*)`>>
+* <<codedoc-example-8h-1af2a3ea719b83f672637febdd87c36c36,`*size_t* write(*int*, *const* *char*{empty}pass:[*], *size_t*)`>>
+* <<codedoc-example-8h-1a9c7b76d5266903891c803132d51ccb90,`*int* read(*int*, *char*{empty}pass:[*], *size_t*)`>>
+
+
+*Macros*
+
+
+[[codedoc-example-8h-1afa99ec4acc4ecb2dc3c2d05da15d0e3f]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-51[definition,window="browse-source"]#
+`*#define* MAX(a, b)`
+
+
+A macro that returns the maximum of _a_ and _b_. 
+
+
+
+
+
+Details. 
+
+
+
+
+
+
+====
+
+*Typedefs*
+
+
+[[codedoc-example-8h-1ae1e6edbbc26d6fbc71a90190d0266018]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-52[definition,window="browse-source"]#
+`*typedef* *unsigned* *int* UINT32`
+
+
+A type definition for a . 
+
+
+
+
+
+Details. 
+
+
+
+
+
+
+====
+
+*Variables*
+
+
+[[codedoc-example-8h-1ad65a8842cc674e3ddf69355898c0ecbf]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-53[definition,window="browse-source"]#
+`*int* errno`
+
+
+Contains the last error code. 
+
+
+
+
+
+[WARNING]
+Not thread safe! 
+
+
+
+
+
+
+
+====
+
+*Functions*
+
+
+[[codedoc-example-8h-1a2c4414339f388561554c2deab11a1a07]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-54[definition,window="browse-source"]#
+`*int* open(*const* *char*{empty}pass:[*], *int*)`
+
+
+Opens a file descriptor. 
+
+
+
+
+
+.Parameters
+. pathname - 
+The name of the descriptor. 
+. flags - 
+Opening flags. 
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1ae152484c890a24e4d9b4980e7b965be0]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-55[definition,window="browse-source"]#
+`*int* close(*int*)`
+
+
+Closes the file descriptor _fd_. 
+
+
+
+
+
+.Parameters
+. fd - 
+The descriptor to close. 
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1af2a3ea719b83f672637febdd87c36c36]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-56[definition,window="browse-source"]#
+`*size_t* write(*int*, *const* *char*{empty}pass:[*], *size_t*)`
+
+
+Writes _count_ bytes from _buf_ to the filedescriptor _fd_. 
+
+
+
+
+
+.Parameters
+. fd - 
+The descriptor to write to. 
+. buf - 
+The data buffer to write. 
+. count - 
+The number of bytes to write. 
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1a9c7b76d5266903891c803132d51ccb90]]
+====
+
+
+[.right.small]#Jump to link:src/example/example.h.html#line-57[definition,window="browse-source"]#
+`*int* read(*int*, *char*{empty}pass:[*], *size_t*)`
+
+
+Read bytes from a file descriptor. 
+
+
+
+
+
+.Parameters
+. fd - 
+The descriptor to read from. 
+. buf - 
+The buffer to read into. 
+. count - 
+The number of bytes to read. 
+
+
+
+
+
+
+
+====
+
