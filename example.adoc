@@ -23,92 +23,44 @@
 
 
 
+.Structs and Unions
+* <<codedoc-structHASH,`*struct* HASH`>>
 
 
 
-.Macros
-* <<codedoc-example-8h-1afa99ec4acc4ecb2dc3c2d05da15d0e3f,`MAX`>>
 
-.Typedefs
-* <<codedoc-example-8h-1ae1e6edbbc26d6fbc71a90190d0266018,`*unsigned* *int* UINT32`>>
-
-.Variables
-* <<codedoc-example-8h-1ad65a8842cc674e3ddf69355898c0ecbf,`*int* errno`>>
 
 .Functions
-* <<codedoc-example-8h-1a2c4414339f388561554c2deab11a1a07,`*int* open(*const* *char*{empty}pass:[*], *int*)`>>
-* <<codedoc-example-8h-1ae152484c890a24e4d9b4980e7b965be0,`*int* close(*int*)`>>
-* <<codedoc-example-8h-1af2a3ea719b83f672637febdd87c36c36,`*size_t* write(*int*, *const* *char*{empty}pass:[*], *size_t*)`>>
-* <<codedoc-example-8h-1a9c7b76d5266903891c803132d51ccb90,`*int* read(*int*, *char*{empty}pass:[*], *size_t*)`>>
+* <<codedoc-example-8h-1a84773bb6929fc7e23beac0bb1812b0b7,`HashIndex INDEX(KEYTYPE k)`>>
+* <<codedoc-example-8h-1a017debd47e188e6219009f0eb5e8f002,`*void* DESTROY(HASH{empty}pass:[*] h)`>>
+* <<codedoc-example-8h-1a745052553926d2ab46eb1487eb7472fb,`*void* CAT(HASH, _auto_destroy)(HASH{empty}pass:[*] h)`>>
+* <<codedoc-example-8h-1ae653edd48e24a652a128dc56b0d8efb7,`ENTRY{empty}pass:[*] NEXT(*const* HASH{empty}pass:[*] h, ENTRY{empty}pass:[*] e)`>>
+* <<codedoc-example-8h-1a3f9d4927a3afa1f51d1207e04c341045,`ENTRY{empty}pass:[*] INSERTPOS(HASH{empty}pass:[*] h, HashIndex i)`>>
+* <<codedoc-example-8h-1aee56329c596593f8ca38621894fdb932,`*void* GROW(HASH{empty}pass:[*] h)`>>
+* <<codedoc-example-8h-1a11fb3c44ce4c4a2ec4aed0bca91960af,`ENTRY{empty}pass:[*] INSERT(HASH{empty}pass:[*] h, HashIndex i)`>>
+* <<codedoc-example-8h-1a8ada7517d0bd64b8a7140b495918e4ed,`*bool* FINDPOS(*const* HASH{empty}pass:[*] h, KEYTYPE k, HashIndex i, ENTRY{empty}pass:[*]{empty}pass:[*] r)`>>
+* <<codedoc-example-8h-1a721b89eb43dc737ecd5ddbfa348577fe,`ENTRY{empty}pass:[*] FIND(*const* HASH{empty}pass:[*] h, KEYTYPE k)`>>
+* <<codedoc-example-8h-1affc1558e0d4f9f29aacccf3c3f7955ee,`*bool* CREATE(HASH{empty}pass:[*] h, KEYTYPE k, ENTRY{empty}pass:[*]{empty}pass:[*] r)`>>
 
 
-*Macros*
+*Structs and Unions*
 
 
-[[codedoc-example-8h-1afa99ec4acc4ecb2dc3c2d05da15d0e3f]]
+[[codedoc-structHASH]]
 ====
-`*#define* MAX(a, b)`
-
-
-A macro that returns the maximum of _a_ and _b_. 
-
-
-
-
-
-Details. 
+`*struct* HASH`
 
 
 
 
 
 
-====
-
-*Typedefs*
 
 
-[[codedoc-example-8h-1ae1e6edbbc26d6fbc71a90190d0266018]]
-====
-`*typedef* *unsigned* *int* UINT32`
-
-
-A type definition for a . 
-
-
-
-
-
-Details. 
-
-
-
-
-
-
-====
-
-*Variables*
-
-
-[[codedoc-example-8h-1ad65a8842cc674e3ddf69355898c0ecbf]]
-====
-`*int* errno`
-
-
-Contains the last error code. 
-
-
-
-
-
-[WARNING]
-Not thread safe! 
-
-
-
-
-
+.Fields
+* [[codedoc-structHASH-1a06f00df94914607054c574b634bb97e2]] `ENTRY{empty}pass:[*] entry`
+* [[codedoc-structHASH-1a7e89632fc8e0a2e766e4c43a3c6c9336]] `*size_t* count`
+* [[codedoc-structHASH-1ac8d78a470fd0712e3350626261107a8e]] `*size_t* size`
 
 
 ====
@@ -116,22 +68,80 @@ Not thread safe!
 *Functions*
 
 
-[[codedoc-example-8h-1a2c4414339f388561554c2deab11a1a07]]
+[[codedoc-example-8h-1a84773bb6929fc7e23beac0bb1812b0b7]]
 ====
-`*int* open(*const* *char*{empty}pass:[*], *int*)`
-
-
-Opens a file descriptor. 
+`*static* HashIndex INDEX(KEYTYPE k)`
 
 
 
 
+
+
+Compute hash index 
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1a017debd47e188e6219009f0eb5e8f002]]
+====
+`*static* *void* DESTROY(<<codedoc-structHASH,HASH>>{empty}pass:[*] h)`
+
+
+
+
+
+
+Destroy hash table and free allocated memory 
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1a745052553926d2ab46eb1487eb7472fb]]
+====
+`*static* *void* CAT(<<codedoc-structHASH,HASH>>, _auto_destroy)`
+
+
+
+
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1ae653edd48e24a652a128dc56b0d8efb7]]
+====
+`*static* ENTRY{empty}pass:[*] NEXT(*const* <<codedoc-structHASH,HASH>>{empty}pass:[*] h, ENTRY{empty}pass:[*] e)`
+
+
+
+
+
+
+Get next entry in the hash table
 
 .Parameters
-. pathname - 
-The name of the descriptor. 
-. flags - 
-Opening flags. 
+. h - 
+Hash table 
+. e - 
+Current entry 
+
+.Return
+Next entry 
 
 
 
@@ -142,20 +152,25 @@ Opening flags.
 ====
 
 
-[[codedoc-example-8h-1ae152484c890a24e4d9b4980e7b965be0]]
+[[codedoc-example-8h-1a3f9d4927a3afa1f51d1207e04c341045]]
 ====
-`*int* close(*int*)`
-
-
-Closes the file descriptor _fd_. 
+`*static* ENTRY{empty}pass:[*] INSERTPOS(<<codedoc-structHASH,HASH>>{empty}pass:[*] h, HashIndex i)`
 
 
 
 
+
+
+Get next free insertion position in the hash table
 
 .Parameters
-. fd - 
-The descriptor to close. 
+. h - 
+Hash table 
+. i - 
+Hash index 
+
+.Return
+Pointer to free entry 
 
 
 
@@ -166,24 +181,44 @@ The descriptor to close.
 ====
 
 
-[[codedoc-example-8h-1af2a3ea719b83f672637febdd87c36c36]]
+[[codedoc-example-8h-1aee56329c596593f8ca38621894fdb932]]
 ====
-`*size_t* write(*int*, *const* *char*{empty}pass:[*], *size_t*)`
-
-
-Writes _count_ bytes from _buf_ to the filedescriptor _fd_. 
+`*static* *void* GROW(<<codedoc-structHASH,HASH>>{empty}pass:[*] h)`
 
 
 
 
+
+
+Grow hash table by factor of two 
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1a11fb3c44ce4c4a2ec4aed0bca91960af]]
+====
+`*static* ENTRY{empty}pass:[*] INSERT(<<codedoc-structHASH,HASH>>{empty}pass:[*] h, HashIndex i)`
+
+
+
+
+
+
+Insert into hash table
 
 .Parameters
-. fd - 
-The descriptor to write to. 
-. buf - 
-The data buffer to write. 
-. count - 
-The number of bytes to write. 
+. h - 
+Hash table 
+. i - 
+Hash index 
+
+.Return
+Pointer to inserted entry 
 
 
 
@@ -194,24 +229,89 @@ The number of bytes to write.
 ====
 
 
-[[codedoc-example-8h-1a9c7b76d5266903891c803132d51ccb90]]
+[[codedoc-example-8h-1a8ada7517d0bd64b8a7140b495918e4ed]]
 ====
-`*int* read(*int*, *char*{empty}pass:[*], *size_t*)`
-
-
-Read bytes from a file descriptor. 
+`*static* *bool* FINDPOS(*const* <<codedoc-structHASH,HASH>>{empty}pass:[*] h, KEYTYPE k, HashIndex i, ENTRY{empty}pass:[*]{empty}pass:[*] r)`
 
 
 
 
+
+
+Find position of entry or insertion position
 
 .Parameters
-. fd - 
-The descriptor to read from. 
-. buf - 
-The buffer to read into. 
-. count - 
-The number of bytes to read. 
+. h - 
+Hash table 
+. k - 
+Key 
+. i - 
+Hash index of key 
+. r - 
+Returns pointer to entry or next insertion position 
+
+.Return
+true if key was found 
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1a721b89eb43dc737ecd5ddbfa348577fe]]
+====
+`*static* ENTRY{empty}pass:[*] FIND(*const* <<codedoc-structHASH,HASH>>{empty}pass:[*] h, KEYTYPE k)`
+
+
+
+
+
+
+Find entry by key
+
+.Parameters
+. h - 
+Hash table 
+. k - 
+Key 
+
+.Return
+Entry or 0 if not found 
+
+
+
+
+
+
+
+====
+
+
+[[codedoc-example-8h-1affc1558e0d4f9f29aacccf3c3f7955ee]]
+====
+`*static* *bool* CREATE(<<codedoc-structHASH,HASH>>{empty}pass:[*] h, KEYTYPE k, ENTRY{empty}pass:[*]{empty}pass:[*] r)`
+
+
+
+
+
+
+Create new entry or find if it already exists
+
+.Parameters
+. h - 
+Hash table 
+. k - 
+Key 
+. r - 
+Pointer to entry 
+
+.Return
+true if the entry was newly created 
 
 
 
