@@ -1,11 +1,6 @@
 
-= Files
-
 [[codedoc-dir-cfafba98a580ce4b62f8a6fa96d7cbb0]]
-== example/
-
-.Subdirectories
-
+= Files
 
 .Files
 * <<codedoc-example-8h,example.h>>

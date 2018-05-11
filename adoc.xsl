@@ -95,28 +95,38 @@
                 <xsl:apply-templates mode="java-class" select="compounddef[@kind='class']"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>&#10;= Files&#10;</xsl:text>
-                <xsl:apply-templates mode="c-dir" select="compounddef[@kind='dir']"/>
+                <xsl:apply-templates mode="c-dir" select="compounddef[@kind='dir' and not(contains(compoundname, '/'))]"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
     <xsl:template match="compounddef" mode="c-dir">
         <xsl:value-of select="adoc:anchorline(@id)"/>
-        <xsl:text>== </xsl:text>
-        <xsl:value-of select="compoundname"/>
-        <xsl:text>/&#10;&#10;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="contains(compoundname, '/')">
+                <xsl:text>== </xsl:text>
+                <xsl:value-of select="compoundname"/>
+                <xsl:text>/&#10;&#10;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>= Files&#10;&#10;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:variable name="parentlen" select="string-length(compoundname)+2"/>
-        <xsl:text>.Subdirectories&#10;</xsl:text>
-        <xsl:for-each select="innerdir">
-            <xsl:value-of select="adoc:refitem(@refid, concat(substring(., $parentlen), '/'))"/>
-        </xsl:for-each>
-        <xsl:text>&#10;&#10;</xsl:text>
-        <xsl:text>.Files&#10;</xsl:text>
-        <xsl:for-each select="innerfile">
-            <xsl:value-of select="adoc:refitem(@refid, .)"/>
-        </xsl:for-each>
-        <xsl:text>&#10;&#10;</xsl:text>
+        <xsl:if test="count(innerdir)>0">
+            <xsl:text>.Subdirectories&#10;</xsl:text>
+            <xsl:for-each select="innerdir">
+                <xsl:value-of select="adoc:refitem(@refid, concat(substring(., $parentlen), '/'))"/>
+            </xsl:for-each>
+            <xsl:text>&#10;&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="count(innerfile)>0">
+            <xsl:text>.Files&#10;</xsl:text>
+            <xsl:for-each select="innerfile">
+                <xsl:value-of select="adoc:refitem(@refid, .)"/>
+            </xsl:for-each>
+            <xsl:text>&#10;&#10;</xsl:text>
+        </xsl:if>
         <xsl:for-each select="innerdir">
             <xsl:apply-templates mode="c-dir" select="//compounddef[@id=current()/@refid]"/>
         </xsl:for-each>
