@@ -9,3 +9,5 @@ MIT (c) 2018 Daniel Mendler
 == Related projects
 
 * https://github.com/veeg/doxml2asciidoc[doxml2asciidoc] uses Ruby instead of XSLT
+* https://github.com/miyabi/doxygen-xml2md[doxygen-xml2md]
+* https://github.com/ngageoint/hootenanny/blob/master/docs/DoxygenToAsciiDoc.xslt[DoxygenToAsciiDoc.xslt]
