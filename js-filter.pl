@@ -1,6 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
 use File::Slurper qw(read_text write_text);
+use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 my $code = read_text $ARGV[0];
 my @lines = split /\n/, $code;

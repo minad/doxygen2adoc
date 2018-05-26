@@ -2,6 +2,7 @@
 use strict;
 use File::Slurper qw(read_text write_text);
 use utf8;
+use open ':std', ':encoding(UTF-8)';
 
 # Until asciidoctor gets inline syntax highlighting we do it here
 # The highlighter understands a tiny bit of C and Java.
