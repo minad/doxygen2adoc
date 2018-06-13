@@ -1,87 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:str="http://exslt.org/strings"
-                xmlns:fn="http://exslt.org/functions"
-                xmlns:adoc="http://asciidoc.org/"
-                extension-element-prefixes="fn">
+                xmlns:adoc="http://asciidoc.org/">
 
     <xsl:output method="text" indent="no"/>
     <xsl:strip-space elements="*"/>
 
-    <fn:function name="adoc:hl">
+    <xsl:function name="adoc:hl">
         <xsl:param name="s"/>
-	<fn:result select="concat('&lt;inline-highlight&gt;', $s, '&lt;/inline-highlight&gt;')"/>
-    </fn:function>
+	<xsl:value-of select="concat('&lt;inline-highlight&gt;', $s, '&lt;/inline-highlight&gt;')"/>
+    </xsl:function>
 
-    <fn:function name="adoc:ends-with">
-        <xsl:param name="s"/>
-        <xsl:param name="t"/>
-        <fn:result select="$t = substring($s, string-length($s) - string-length($t) + 1)"/>
-    </fn:function>
-
-    <fn:function name="adoc:trim">
+    <xsl:function name="adoc:trim">
         <xsl:param name="text"/>
         <xsl:choose>
             <xsl:when test="contains($text, '&#10;&#10;&#10;')">
-                <fn:result select="adoc:trim(str:replace($text, '&#10;&#10;&#10;', '&#10;&#10;'))"/>
+                <xsl:value-of select="adoc:trim(replace($text, '&#10;&#10;&#10;', '&#10;&#10;'))"/>
             </xsl:when>
             <xsl:when test="starts-with($text, '&#10;')">
-                <fn:result select="adoc:trim(substring($text, 2))"/>
+                <xsl:value-of select="adoc:trim(substring($text, 2))"/>
             </xsl:when>
-            <xsl:when test="adoc:ends-with($text, '&#10;')">
-                <fn:result select="adoc:trim(substring($text, 1, string-length($text) - 1))"/>
+            <xsl:when test="ends-with($text, '&#10;')">
+                <xsl:value-of select="adoc:trim(substring($text, 1, string-length($text) - 1))"/>
             </xsl:when>
             <xsl:otherwise>
-                <fn:result select="$text"/>
+                <xsl:value-of select="$text"/>
             </xsl:otherwise>
         </xsl:choose>
-    </fn:function>
+    </xsl:function>
 
-    <fn:function name="adoc:item">
+    <xsl:function name="adoc:item">
         <xsl:param name="text"/>
-        <fn:result select="concat(str:replace(adoc:trim($text), '&#10;&#10;', '&#10;+&#10;'), '&#10;')"/>
-    </fn:function>
+        <xsl:value-of select="concat(replace(adoc:trim($text), '&#10;&#10;', '&#10;+&#10;'), '&#10;')"/>
+    </xsl:function>
 
     <!-- Sanitize underscores in ids (See asciidoctor #2746) -->
-    <fn:function name="adoc:sanitize">
+    <xsl:function name="adoc:sanitize">
         <xsl:param name="id"/>
-        <xsl:choose>
-            <xsl:when test="contains($id, '__')">
-                <fn:result select="adoc:sanitize(str:replace($id, '__', '_'))"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <fn:result select="$id"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </fn:function>
+        <xsl:value-of select="replace($id, '__+', '_')"/>
+    </xsl:function>
 
-    <fn:function name="adoc:id">
+    <xsl:function name="adoc:id">
         <xsl:param name="id"/>
-        <fn:result select="concat('codedoc-', str:replace(adoc:sanitize($id), '_', '-'))"/>
-    </fn:function>
+        <xsl:value-of select="concat('codedoc-', replace(adoc:sanitize($id), '_', '-'))"/>
+    </xsl:function>
 
-    <fn:function name="adoc:ref">
+    <xsl:function name="adoc:ref">
         <xsl:param name="id"/>
         <xsl:param name="name"/>
-        <fn:result select="concat('&lt;&lt;', adoc:id($id), ',', $name, '&gt;&gt;')"/>
-    </fn:function>
+        <xsl:value-of select="concat('&lt;&lt;', adoc:id($id), ',', $name, '&gt;&gt;')"/>
+    </xsl:function>
 
-    <fn:function name="adoc:refitem">
+    <xsl:function name="adoc:refitem">
         <xsl:param name="id"/>
         <xsl:param name="name"/>
-        <fn:result select="concat('* ', adoc:ref($id, $name), '&#10;')"/>
-    </fn:function>
+        <xsl:value-of select="concat('* ', adoc:ref($id, $name), '&#10;')"/>
+    </xsl:function>
 
-    <fn:function name="adoc:anchor">
+    <xsl:function name="adoc:anchor">
         <xsl:param name="id"/>
-        <fn:result select="concat('[[', adoc:id($id), ']]')"/>
-    </fn:function>
+        <xsl:value-of select="concat('[[', adoc:id($id), ']]')"/>
+    </xsl:function>
 
-    <fn:function name="adoc:anchorline">
+    <xsl:function name="adoc:anchorline">
         <xsl:param name="id"/>
-        <fn:result select="concat('&#10;', adoc:anchor($id), '&#10;')"/>
-    </fn:function>
+        <xsl:value-of select="concat('&#10;', adoc:anchor($id), '&#10;')"/>
+    </xsl:function>
 
     <xsl:template match="doxygen">
         <xsl:call-template name="groups"/>
@@ -140,7 +124,7 @@
         <xsl:value-of select="adoc:id(@id)"/>
         <xsl:text>, `*</xsl:text><xsl:value-of select="@kind"/><xsl:text>* </xsl:text>
         <xsl:if test="@kind='interface'">_</xsl:if>
-        <xsl:value-of select="substring-after(str:replace(compoundname, '::', '.'), '.')"/>
+        <xsl:value-of select="substring-after(replace(compoundname, '::', '.'), '.')"/>
         <xsl:if test="@kind='interface'">_</xsl:if>
         <xsl:text>`&gt;&gt;&#10;</xsl:text>
     </xsl:template>
@@ -150,7 +134,7 @@
         <xsl:text>== </xsl:text>
         <xsl:value-of select="@kind"/><xsl:text> </xsl:text>
         <xsl:if test="@kind='interface'">_</xsl:if>
-        <xsl:value-of select="substring-after(str:replace(compoundname, '::', '.'), '.')"/>
+        <xsl:value-of select="substring-after(replace(compoundname, '::', '.'), '.')"/>
         <xsl:if test="@kind='interface'">_</xsl:if>
         <xsl:text>&#10;&#10;</xsl:text>
         <xsl:if test="count(basecompoundref)>0">
@@ -208,7 +192,7 @@
             </xsl:for-each>
         </xsl:if>
         <xsl:text>&#10;&#10;</xsl:text>
-        <xsl:for-each select="innerclass[adoc:ends-with(., '::__anonymous__')]">
+        <xsl:for-each select="innerclass[ends-with(., '::__anonymous__')]">
             <xsl:call-template name="c-nested-struct">
                 <xsl:with-param name="delimiter" select="$delimiter"/>
                 <xsl:with-param name="nestedname" select="."/>
@@ -340,7 +324,7 @@
             <xsl:value-of select="adoc:id(@id)"/>
             <xsl:text>,`</xsl:text>
             <xsl:if test="type!=''">
-                <xsl:value-of select="adoc:hl(str:replace(type, 'final ', ''))"/>
+                <xsl:value-of select="adoc:hl(replace(type, 'final ', ''))"/>
                 <xsl:text> </xsl:text>
             </xsl:if>
             <xsl:choose>

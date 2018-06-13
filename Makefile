@@ -1,5 +1,5 @@
 all:
 	doxygen Doxyfile-c
-	xsltproc -o doc/all.xml doc/xml/combine.xslt doc/xml/index.xml
-	xsltproc -o example.adoc adoc.xsl doc/all.xml
+	java -jar saxon/saxon9he.jar -o:doc/all.xml doc/xml/index.xml doc/xml/combine.xslt
+	java -jar saxon/saxon9he.jar -o:example.adoc doc/all.xml adoc.xsl
 	./adoc-postprocess.pl example.adoc
