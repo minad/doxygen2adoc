@@ -13,20 +13,7 @@
 
     <xsl:function name="adoc:trim">
         <xsl:param name="text"/>
-        <xsl:choose>
-            <xsl:when test="contains($text, '&#10;&#10;&#10;')">
-                <xsl:value-of select="adoc:trim(replace($text, '&#10;&#10;&#10;', '&#10;&#10;'))"/>
-            </xsl:when>
-            <xsl:when test="starts-with($text, '&#10;')">
-                <xsl:value-of select="adoc:trim(substring($text, 2))"/>
-            </xsl:when>
-            <xsl:when test="ends-with($text, '&#10;')">
-                <xsl:value-of select="adoc:trim(substring($text, 1, string-length($text) - 1))"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$text"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="replace(replace($text, '&#10;&#10;+', '&#10;&#10;'), '^&#10;+|&#10;+$', '')"/>
     </xsl:function>
 
     <xsl:function name="adoc:item">
@@ -141,14 +128,7 @@
             <xsl:text>Inherits from </xsl:text>
             <xsl:for-each select="basecompoundref">
                 <xsl:if test="position() > 1">, </xsl:if>
-                <xsl:choose>
-                    <xsl:when test="@refid">
-                        <xsl:value-of select="adoc:ref(@refid, substring-after(., '.'))"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="."/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:value-of select="if (@refid) then adoc:ref(@refid, substring-after(., '.')) else ."/>
             </xsl:for-each>
             <xsl:text>&#10;&#10;</xsl:text>
         </xsl:if>
