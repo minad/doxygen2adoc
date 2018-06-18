@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:adoc="http://asciidoc.org/">
+                xmlns:adoc="http://asciidoc.org/"
+                expand-text="yes">
 
     <xsl:output method="text" indent="no"/>
     <xsl:strip-space elements="*"/>
 
     <xsl:function name="adoc:hl">
         <xsl:param name="s"/>
-	<xsl:value-of select="concat('&lt;inline-highlight&gt;', $s, '&lt;/inline-highlight&gt;')"/>
+        <xsl:text>&lt;inline-highlight&gt;{$s}&lt;/inline-highlight&gt;</xsl:text>
     </xsl:function>
 
     <xsl:function name="adoc:trim">
@@ -18,7 +19,7 @@
 
     <xsl:function name="adoc:item">
         <xsl:param name="text"/>
-        <xsl:value-of select="concat(replace(adoc:trim($text), '&#10;&#10;', '&#10;+&#10;'), '&#10;')"/>
+        <xsl:text>{replace(adoc:trim($text), '&#10;&#10;', '&#10;+&#10;')}&#10;</xsl:text>
     </xsl:function>
 
     <!-- Sanitize underscores in ids (See asciidoctor #2746) -->
@@ -29,29 +30,29 @@
 
     <xsl:function name="adoc:id">
         <xsl:param name="id"/>
-        <xsl:value-of select="concat('codedoc-', replace(adoc:sanitize($id), '_', '-'))"/>
+        <xsl:text>codedoc-{replace(adoc:sanitize($id), '_', '-')}</xsl:text>
     </xsl:function>
 
     <xsl:function name="adoc:ref">
         <xsl:param name="id"/>
         <xsl:param name="name"/>
-        <xsl:value-of select="concat('&lt;&lt;', adoc:id($id), ',', $name, '&gt;&gt;')"/>
+        <xsl:text>&lt;&lt;{adoc:id($id)},{$name}&gt;&gt;</xsl:text>
     </xsl:function>
 
     <xsl:function name="adoc:refitem">
         <xsl:param name="id"/>
         <xsl:param name="name"/>
-        <xsl:value-of select="concat('* ', adoc:ref($id, $name), '&#10;')"/>
+        <xsl:text>* {adoc:ref($id, $name)}&#10;</xsl:text>
     </xsl:function>
 
     <xsl:function name="adoc:anchor">
         <xsl:param name="id"/>
-        <xsl:value-of select="concat('[[', adoc:id($id), ']]')"/>
+        <xsl:text>[[{adoc:id($id)}]]</xsl:text>
     </xsl:function>
 
     <xsl:function name="adoc:anchorline">
         <xsl:param name="id"/>
-        <xsl:value-of select="concat('&#10;', adoc:anchor($id), '&#10;')"/>
+        <xsl:text>&#10;{adoc:anchor($id)}&#10;</xsl:text>
     </xsl:function>
 
     <xsl:template match="doxygen">
@@ -75,9 +76,7 @@
         <xsl:value-of select="adoc:anchorline(@id)"/>
         <xsl:choose>
             <xsl:when test="contains(compoundname, '/')">
-                <xsl:text>== </xsl:text>
-                <xsl:value-of select="compoundname"/>
-                <xsl:text>/&#10;&#10;</xsl:text>
+                <xsl:text>== {compoundname}/&#10;&#10;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>= Files&#10;&#10;</xsl:text>
@@ -87,7 +86,7 @@
         <xsl:if test="count(innerdir)>0">
             <xsl:text>.Subdirectories&#10;</xsl:text>
             <xsl:for-each select="innerdir">
-                <xsl:value-of select="adoc:refitem(@refid, concat(substring(., $parentlen), '/'))"/>
+                <xsl:value-of select="adoc:refitem(@refid, substring(., $parentlen) || '/')"/>
             </xsl:for-each>
             <xsl:text>&#10;&#10;</xsl:text>
         </xsl:if>
@@ -107,9 +106,7 @@
     </xsl:template>
 
     <xsl:template match="compounddef" mode="java-class-link">
-        <xsl:text>* &lt;&lt;</xsl:text>
-        <xsl:value-of select="adoc:id(@id)"/>
-        <xsl:text>, `*</xsl:text><xsl:value-of select="@kind"/><xsl:text>* </xsl:text>
+        <xsl:text>* &lt;&lt;{adoc:id(@id)}, `*{@kind}* </xsl:text>
         <xsl:if test="@kind='interface'">_</xsl:if>
         <xsl:value-of select="substring-after(replace(compoundname, '::', '.'), '.')"/>
         <xsl:if test="@kind='interface'">_</xsl:if>
@@ -117,9 +114,7 @@
     </xsl:template>
 
     <xsl:template match="compounddef" mode="java-class">
-        <xsl:value-of select="adoc:anchorline(@id)"/>
-        <xsl:text>== </xsl:text>
-        <xsl:value-of select="@kind"/><xsl:text> </xsl:text>
+        <xsl:text>{adoc:anchorline(@id)}== {@kind} </xsl:text>
         <xsl:if test="@kind='interface'">_</xsl:if>
         <xsl:value-of select="substring-after(replace(compoundname, '::', '.'), '.')"/>
         <xsl:if test="@kind='interface'">_</xsl:if>
@@ -148,10 +143,9 @@
 
     <xsl:template name="c-struct">
         <xsl:param name="delimiter"/>
-        <xsl:value-of select="adoc:anchorline(@id)"/>
-        <xsl:value-of select="$delimiter"/><xsl:text>&#10;</xsl:text>
+        <xsl:text>{adoc:anchorline(@id)}{$delimiter}&#10;</xsl:text>
         <xsl:call-template name="source-link"/>
-        <xsl:value-of select="concat('`*', @kind, '* ', compoundname, '`')"/>
+        <xsl:value-of select="'`*' || @kind || '* ' || compoundname || '`'"/>
         <xsl:apply-templates select="detaileddescription|briefdescription|inbodydescription"/>
         <xsl:if test="count(*/memberdef[not(contains(type/ref, '::')) and not(starts-with(name, '_'))]) > 0">
             <xsl:text>&#10;.Fields&#10;</xsl:text>
@@ -164,11 +158,11 @@
                         <xsl:text> </xsl:text>
                     </xsl:if>
                     <xsl:value-of select="name"/>
-	            <xsl:value-of select="adoc:hl(argsstring)"/>
+                    <xsl:value-of select="adoc:hl(argsstring)"/>
                     <xsl:text>`</xsl:text>
                     <xsl:apply-templates select="detaileddescription|briefdescription|inbodydescription"/>
                 </xsl:variable>
-                <xsl:value-of select="concat('* ', adoc:anchor(@id), ' ', adoc:item($item))"/>
+                <xsl:text>* {adoc:anchor(@id)} {adoc:item($item)}</xsl:text>
             </xsl:for-each>
         </xsl:if>
         <xsl:text>&#10;&#10;</xsl:text>
@@ -184,7 +178,7 @@
                 <xsl:with-param name="nestedname" select="type/ref"/>
             </xsl:call-template>
         </xsl:for-each>
-        <xsl:value-of select="$delimiter"/><xsl:text>&#10;&#10;</xsl:text>
+        <xsl:text>{$delimiter}&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template name="c-nested-struct">
@@ -192,16 +186,13 @@
         <xsl:param name="nestedname"/>
         <xsl:for-each select="//compounddef[compoundname=$nestedname]">
             <xsl:call-template name="c-struct">
-                <xsl:with-param name="delimiter" select="concat($delimiter, '=')"/>
+                <xsl:with-param name="delimiter" select="$delimiter || '='"/>
             </xsl:call-template>
         </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="compounddef" mode="c-file">
-        <xsl:value-of select="adoc:anchorline(@id)"/>
-        <xsl:text>== </xsl:text>
-        <xsl:value-of select="location/@file"/>
-        <xsl:text>&#10;&#10;</xsl:text>
+        <xsl:text>{adoc:anchorline(@id)}== {location/@file}&#10;&#10;</xsl:text>
         <xsl:call-template name="source-file-link"/>
         <xsl:apply-templates select="detaileddescription|briefdescription|inbodydescription"/>
         <xsl:if test="count(includes[@refid])>0">
@@ -230,7 +221,7 @@
             <xsl:text>.Structs and Unions&#10;</xsl:text>
             <xsl:for-each select="innerclass">
                 <xsl:for-each select="//compounddef[@id=current()/@refid and not(contains(compoundname, '::'))]">
-                    <xsl:value-of select="adoc:refitem(@id, concat('`*', @kind, '* ', compoundname, '`'))"/>
+                    <xsl:value-of select="adoc:refitem(@id, '`*' || @kind || '* ' || compoundname || '`')"/>
                 </xsl:for-each>
             </xsl:for-each>
             <xsl:text>&#10;&#10;</xsl:text>
@@ -240,9 +231,7 @@
 
     <xsl:template name="groups">
         <xsl:for-each select="compounddef[@kind='group']">
-            <xsl:text>&#10;&#10;= </xsl:text>
-            <xsl:value-of select="title"/>
-            <xsl:text>&#10;&#10;</xsl:text>
+            <xsl:text>&#10;&#10;= {title}&#10;&#10;</xsl:text>
             <xsl:apply-templates select="detaileddescription|briefdescription|inbodydescription"/>
             <xsl:call-template name="c-member-outline"/>
         </xsl:for-each>
@@ -300,27 +289,23 @@
 
     <xsl:template match="memberdef" mode="member-outline-item">
         <xsl:variable name="item">
-            <xsl:text>&lt;&lt;</xsl:text>
-            <xsl:value-of select="adoc:id(@id)"/>
-            <xsl:text>,`</xsl:text>
+            <xsl:text>&lt;&lt;{adoc:id(@id)},`</xsl:text>
             <xsl:if test="type!=''">
-                <xsl:value-of select="adoc:hl(replace(type, 'final ', ''))"/>
-                <xsl:text> </xsl:text>
+                <xsl:text>{adoc:hl(replace(type, 'final ', ''))} </xsl:text>
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="@kind='enum' and starts-with(name, '@')">__anonymous__</xsl:when>
                 <xsl:otherwise><xsl:value-of select="name"/></xsl:otherwise>
             </xsl:choose>
-	    <xsl:value-of select="adoc:hl(argsstring)"/>
+            <xsl:value-of select="adoc:hl(argsstring)"/>
             <xsl:text>`</xsl:text>
             <xsl:text>&gt;&gt;</xsl:text>
         </xsl:variable>
-        <xsl:value-of select="concat('* ', adoc:item($item))"/>
+        <xsl:text>* {adoc:item($item)}</xsl:text>
     </xsl:template>
 
     <xsl:template match="memberdef" mode="member">
-        <xsl:value-of select="adoc:anchorline(@id)"/>
-        <xsl:text>====&#10;</xsl:text>
+        <xsl:text>{adoc:anchorline(@id)}====&#10;</xsl:text>
         <xsl:call-template name="source-link"/>
         <xsl:text>`</xsl:text>
         <xsl:if test="/doxygen/compounddef[1]/@language='Java'">
@@ -364,8 +349,7 @@
                         <xsl:if test="position() > 1">, </xsl:if>
                         <xsl:apply-templates select="type"/>
                         <xsl:if test="declname!=''">
-                            <xsl:text> </xsl:text>
-                            <xsl:value-of select="declname"/>
+                            <xsl:text> {declname}</xsl:text>
                         </xsl:if>
                     </xsl:for-each>
                     <xsl:text>)</xsl:text>
@@ -377,7 +361,7 @@
         <xsl:if test="@kind='enum'">
             <xsl:text>.Enum values&#10;</xsl:text>
             <xsl:for-each select="enumvalue">
-                <xsl:value-of select="concat('* ', adoc:anchor(@id), ' `', name, '`&#10;')"/>
+                <xsl:value-of select="'* ' || adoc:anchor(@id) || ' `' || name || '`&#10;'"/>
             </xsl:for-each>
         </xsl:if>
         <xsl:text>====&#10;&#10;</xsl:text>
@@ -422,9 +406,7 @@
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
     <xsl:template mode="description" match="verbatim">
-        <xsl:text>&#10;&#10;....&#10;</xsl:text>
-        <xsl:value-of select="."/>
-        <xsl:text>&#10;....&#10;&#10;</xsl:text>
+        <xsl:text>&#10;&#10;....&#10;{.}&#10;....&#10;&#10;</xsl:text>
     </xsl:template>
     <xsl:template mode="description" match="parameterlist">
         <xsl:text>.Parameters&#10;</xsl:text>
@@ -442,7 +424,7 @@
     <xsl:template mode="description" match="simplesect[@kind='see']">
         <xsl:if test="position()=1">&#10;.See&#10;</xsl:if>
         <xsl:variable name="item"><xsl:apply-templates mode="description"/></xsl:variable>
-        <xsl:value-of select="concat('* ', adoc:item($item))"/>
+        <xsl:text>* {adoc:item($item)}</xsl:text>
     </xsl:template>
     <xsl:template mode="description" match="simplesect[@kind='note' or @kind='warning']">
         <xsl:choose>
@@ -473,11 +455,7 @@
 
     <xsl:template name="source-file-link">
         <!--
-        <xsl:text>Jump to link:src/</xsl:text>
-        <xsl:value-of select="location/@file"/>
-        <xsl:text>.html#line-</xsl:text>
-        <xsl:value-of select="location/@line"/>
-        <xsl:text>[source file,window="browse-source"]&#10;&#10;</xsl:text>
+        <xsl:text>Jump to link:src/{location/@file}.html#line-{location/@line}[source file,window="browse-source"]&#10;&#10;</xsl:text>
         -->
     </xsl:template>
 
@@ -487,23 +465,11 @@
         <xsl:text>[.right.small]#Jump to </xsl:text>
         <xsl:choose>
             <xsl:when test="not(location/@bodyfile) or (location/@file = location/@bodyfile and location/@line = location/@bodystart)">
-                <xsl:text>link:src/</xsl:text>
-                <xsl:value-of select="location/@file"/>
-                <xsl:text>.html#line-</xsl:text>
-                <xsl:value-of select="location/@line"/>
-                <xsl:text>[definition,window="browse-source"]</xsl:text>
+                <xsl:text>link:src/{location/@file}.html#line-{location/@line}[definition,window="browse-source"]</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>link:src/</xsl:text>
-                <xsl:value-of select="location/@file"/>
-                <xsl:text>.html#line-</xsl:text>
-                <xsl:value-of select="location/@line"/>
-                <xsl:text>[declaration,window="browse-source"]</xsl:text>
-                <xsl:text> or link:src/</xsl:text>
-                <xsl:value-of select="location/@bodyfile"/>
-                <xsl:text>.html#line-</xsl:text>
-                <xsl:value-of select="location/@bodystart"/>
-                <xsl:text>[definition,window="browse-source"]</xsl:text>
+                <xsl:text>link:src/{location/@file}.html#line-{location/@line}[declaration,window="browse-source"]</xsl:text>
+                <xsl:text> or link:src/{location/@bodyfile}.html#line-{location/@bodystart}[definition,window="browse-source"]</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>#&#10;</xsl:text>
@@ -513,8 +479,8 @@
     <!-- Debugging -->
     <xsl:template match="*">
         <xsl:message terminate="yes">
-            Unmatched element <xsl:value-of select="."/>
-            Child of <xsl:value-of select=".."/>
+            Unmatched element {.}
+            Child of {..}
         </xsl:message>
     </xsl:template>
 </xsl:stylesheet>
