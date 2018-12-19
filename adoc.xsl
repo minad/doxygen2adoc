@@ -248,6 +248,10 @@
                 <xsl:when test="@kind='public-static-attrib'">*Public Static Fields*&#10;&#10;</xsl:when>
                 <xsl:when test="@kind='private-static-func'">*Private Static Functions*&#10;&#10;</xsl:when>
                 <xsl:when test="@kind='public-static-func'">*Public Static Functions*&#10;&#10;</xsl:when>
+                <xsl:when test="@kind='package-attrib'">*Package Fields*&#10;&#10;</xsl:when>
+                <xsl:when test="@kind='package-func'">*Package Functions*&#10;&#10;</xsl:when>
+                <xsl:when test="@kind='package-static-attrib'">*Package Static Fields*&#10;&#10;</xsl:when>
+                <xsl:when test="@kind='package-static-func'">*Package Static Functions*&#10;&#10;</xsl:when>
                 <xsl:when test="@kind='define'">*Macros*&#10;&#10;</xsl:when>
                 <xsl:when test="@kind='enum'">*Enums*&#10;&#10;</xsl:when>
                 <xsl:when test="@kind='typedef'">*Typedefs*&#10;&#10;</xsl:when>
@@ -404,6 +408,11 @@
         <xsl:text>&#10;</xsl:text>
         <xsl:apply-templates mode="description"/>
         <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+    <xsl:template mode="description" match="image">
+        <xsl:text>image::</xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>[]&#10;</xsl:text>
     </xsl:template>
     <xsl:template mode="description" match="verbatim">
         <xsl:text>&#10;&#10;....&#10;{.}&#10;....&#10;&#10;</xsl:text>
